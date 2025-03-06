@@ -9,15 +9,11 @@
 
 ## Foydalanildi
 
-PHP 8.2 
-
-Laravel 12 
-
-PostgreSQL
-
-Sanctum
-
-Laravel Sail(Docker)
+- PHP 8.2 
+- Laravel 12 
+- PostgreSQL
+- Sanctum
+- Laravel Sail(Docker)
 
 ## Admin user
 
