@@ -1,5 +1,7 @@
 # Laravel 12 Project with Docker, PostgreSQL, and Redis
 
+**Note:** Since Laravel 12 is still new, some packages may not work, so I rewrote them manually as best I could.
+
 ## Requirements
 
 - **PHP**: 8.2+
@@ -63,61 +65,4 @@ npm run dev
 - **Laravel Jetstream (Livewire)** – Authentication & Dashboard
 - **Sanctum** – API Authentication
 - **Spatie Medialibrary** – Media File Management
-- **Spatie Response Cache** – API Response Caching
-- **TailwindCSS** – UI Styling
-- **PostgreSQL** – Database
-- **Redis** – Cache & Queue Driver
-- **Adminer** – Database Management
-
-## API Routes
-
-### Authentication
-
-```http
-POST /api/register    # User Registration
-POST /api/login       # User Login
-GET  /api/logout      # Logout
-GET  /api/user        # Get Authenticated User
-```
-
-### Posters
-
-```http
-POST   /api/poster        # Create (Admin Only)
-GET    /api/poster/{id}   # Read
-PUT    /api/poster/{id}   # Update (Admin Only)
-DELETE /api/poster/{id}   # Delete (Admin Only)
-POST   /api/posterall     # Fetch All Posters with Filters
-GET    /api/posterlike/{id} # Toggle Like
-```
-
-### Categories & Regions
-
-```http
-GET /api/regandcat  # Fetch Categories and Regions (Cached with Redis)
-```
-
-## Deployment
-
-### 1. Build Optimized Files
-
-```sh
-npm run build
-```
-
-### 2. Clear and Cache Configurations
-
-```sh
-./vendor/bin/sail artisan config:cache
-```
-
-### 3. Run in Production Mode
-
-```sh
-./vendor/bin/sail up -d --build
-```
-
-## License
-
-This project is licensed under the MIT License.
-
+- **Spatie Response Cache** – API Response Cachin
