@@ -7,13 +7,18 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Foydalanildi
 
 PHP 8.2 
-
-
 Laravel 12 
+PostgreSQL
+Sanctum
+Laravel Sail(Docker)
 
+## Admin user
+
+Email: admin@example.com
+Password: password
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
 - [Powerful dependency injection container](https://laravel.com/docs/container).
