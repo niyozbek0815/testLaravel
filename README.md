@@ -10,14 +10,19 @@
 ## Foydalanildi
 
 PHP 8.2 
+
 Laravel 12 
+
 PostgreSQL
+
 Sanctum
+
 Laravel Sail(Docker)
 
 ## Admin user
 
 Email: admin@example.com
+
 Password: password
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
