@@ -10,6 +10,7 @@ use App\Http\Resources\PosterReadResource;
 use App\Http\Resources\PosterAllResource;
 use App\Http\Requests\PosterStoreRequest;
 use App\Http\Requests\PosterUpdateRequest;
+use App\Models\Poster;
 use App\Service\PosterService;
 
 class PosterController extends Controller

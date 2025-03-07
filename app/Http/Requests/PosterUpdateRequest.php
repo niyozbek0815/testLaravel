@@ -26,7 +26,7 @@ class PosterUpdateRequest extends FormRequest
     {
         return [
             'hashtags' => 'required|array',
-            'hashtags.*' => 'required|integer|min:1',
+            'hashtags.*' => 'required|integer|min:0',
             'title'       => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'price'       => 'sometimes|integer|min:0|max:99999999999999.99',
@@ -41,6 +41,25 @@ class PosterUpdateRequest extends FormRequest
             'images' => ['sometimes', 'string', 'regex:/^data:image\/(jpeg|png|jpg|gif);base64,.+/'],
         ];
     }
+    // public function withValidator($validator)
+    // {
+    //     $validator->after(function ($validator) {
+    //         $poster = $this->route('poster'); // URL'dan poster modelini olish
+    //         if (!$poster) {
+    //             $validator->errors()->add('poster', 'Poster topilmadi.');
+    //             return;
+    //         }
+    //         $existingAttributeIds = $poster->attributes()->pluck('id')->toArray();
+    //         $sentAttributeIds = collect($this->input('attributes'))->pluck('id')->toArray();
+
+    //         // Majburiy atributlar jo‘natilganligini tekshiramiz
+    //         $missingAttributes = array_diff($existingAttributeIds, $sentAttributeIds);
+
+    //         if (!empty($missingAttributes)) {
+    //             $validator->errors()->add('attributes', 'Quyidagi atributlar majburiy: ' . implode(', ', $missingAttributes));
+    //         }
+    //     });
+    // }
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

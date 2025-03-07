@@ -51,7 +51,7 @@ class PosterRepository extends BaseRepository
     public function syncHashtags(Poster $poster, array $hashtags): void {
         $poster->hashtags()->attach($hashtags);
     }
-    public function syncAttributes(Poster $poster, array $data): void
+    public function syncAttributes($poster, array $data): void
     {
             $attributes = collect($data)
                 ->mapWithKeys(fn($attr) => [$attr['id'] => ['value' => $attr['value']]]);
@@ -68,11 +68,14 @@ class PosterRepository extends BaseRepository
     }
     public function update($id, array $data)
     {
-        $model = $this->find($id);
+        $model = $this->model->find($id);
         if (!empty($data['hashtags'])) {
             $model->hashtags()->sync($data['hashtags']);
         }
-        $model->update($data);
+        if (!empty($data['attributes'])) {
+            $this->syncAttributes($model, $data['attributes']);
+        }
+            $model->update($data);
         return $model;
     }
 }
