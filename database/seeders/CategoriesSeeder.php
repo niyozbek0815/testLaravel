@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Attribute;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,72 +14,128 @@ class CategoriesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = [
+        $data = [
             [
-                "name" => "Kvartiralar",
-                "description" => "Ko‘p qavatli uylardagi kvartiralar",
+                "name" => "Ko'chmas mulk",
                 "subcategories" => [
-                    ["name" => "Yangi", "description" => "Yangi qurilgan ko‘p qavatli uylar"],
-                    ["name" => "Ikkinchi", "description" => "Oldin ishlatilgan kvartiralar"],
-                    ["name" => "Luks", "description" => "Premium toifadagi kvartiralar"],
+                    [
+                        "name" => "Kvartiralar",
+                        "attributes" => [
+                            ["key" => "rooms", "type" => "integer"],
+                            ["key" => "area", "type" => "integer"],
+                            ["key" => "balkon", "type" => "boolean"],
+                        ],
+                    ],
+                    [
+                        "name" => "Tijorat binolari",
+                        "attributes" => [
+                            ["key" => "area", "type" => "integer"],
+                            ["key" => "floors", "type" => "string"],
+                            ["key" => "rooms", "type" => "integer"],
+                        ],
+                    ],
+                    [
+                        "name" => "Xovlilar",
+                        "attributes" => [
+                            ["key" => "area", "type" => "integer"],
+                            ["key" => "rooms", "type" => "integer"],
+                            ["key" => "garage", "type" => "boolean"],
+                        ],
+                    ],
                 ]
             ],
             [
-                "name" => "Hovlilar",
-                "description" => "Shaxsiy hovlili uylar",
+                "name" => "Transport",
                 "subcategories" => [
-                    ["name" => "Yangi", "description" => "Yangi qurilgan hovlilar"],
-                    ["name" => "Eski", "description" => "Eski hovlilar, ta’mir talab"],
-                    ["name" => "Villa", "description" => "Hasamatli villalar"],
+                    [
+                        "name" => "Yengil automashinalar",
+                        "attributes" => [
+                            ["key" => "mileage", "type" => "integer"],
+                            ["key" => "fuel_type", "type" => "string"],
+                            ["key" => "ishlab chiqarilgan yili", "type" => "decimal"],
+                        ],
+                    ],
+                    [
+                        "name" => "Yuk mashinalar",
+                        "attributes" => [
+                            ["key" => "capacity", "type" => "integer"],
+                            ["key" => "fuel_type", "type" => "string"],
+                            ["key" => "haqdorlar", "type" => "decimal"],
+                        ],
+                    ],
+                    [
+                        "name" => "Mototransport",
+                        "attributes" => [
+                            ["key" => "engine_size", "type" => "integer"],
+                            ["key" => "fuel_type", "type" => "string"],
+                            ["key" => "haqdorlar", "type" => "decimal"],
+                        ],
+                    ],
                 ]
             ],
             [
-                "name" => "Tijorat",
-                "description" => "Biznes uchun mo‘ljallangan binolar",
+                "name" => "Elektronika",
                 "subcategories" => [
-                    ["name" => "Ofis", "description" => "Ofis uchun mo‘ljallangan binolar"],
-                    ["name" => "Savdo do‘konlari", "description" => "Savdo markazlari va do‘konlar"],
-                    ["name" => "Omborxonalar", "description" => "Yuk saqlash uchun maxsus joylar"],
-                ]
-            ],
-            [
-                "id" => 4,
-                "name" => "Dachalar",
-                "description" => "Shahardan tashqaridagi dam olish uchun uylar",
-                "subcategories" => []
-            ],
-            [
-                "name" => "Yer uchastkalari",
-                "subcategories" => [
-                    ["name" => "Shahar ichida", "description" => "Shahar ichidagi yer uchastkalari"],
-                    ["name" => "Shahar tashqarisida", "description" => "Shahar tashqarisidagi yer uchastkalari"],
-                    ["name" => "Qishloq xo‘jaligi", "description" => "Fermalar va ekin yerlari uchun"],
+                    [
+                        "name" => "Telefon",
+                        "attributes" => [
+                            ["key" => "brand", "type" => "string"],
+                            ["key" => "storage", "type" => "integer"],
+                            ["key" => "ram", "type" => "decimal"],
+                        ],
+                    ],
+                    [
+                        "name" => "Audiotexnika",
+                        "attributes" => [
+                            ["key" => "brand", "type" => "string"],
+                            ["key" => "power", "type" => "integer"],
+                            ["key" => "storage", "type" => "decimal"],
+                        ],
+                    ],
+                    [
+                        "name" => "Kompyuterlar",
+                        "attributes" => [
+                            ["key" => "brand", "type" => "string"],
+                            ["key" => "ram", "type" => "integer"],
+                            ["key" => "storage", "type" => "integer"],
+                            ["key" => "display size", "type" => "decimal"],
+                        ],
+                    ],
                 ]
             ],
         ];
+        DB::transaction(function () use ($data) {
+            foreach ($data as $category) {
+                $categoryId = DB::table('categories')->insertGetId([
+                    'name' => $category['name'],
+                    'slug' => mb_strtolower(str_replace(' ', '_', $category['name'])),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
-        // Kategoriyalarni qo'shish
-        foreach ($categories as $category) {
-            $categoryId = DB::table('categories')->insertGetId([
-                'name' => $category['name'],
-                'slug' => mb_strtolower($category['name']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Subkategoriyalarni qo'shish
-            if (!empty($category['subcategories'])) {
-                foreach ($category['subcategories'] as $subcategory) {
-                    $text = $category['name'] . '_' . $subcategory['name'];
-                    DB::table('categories')->insert([
+                foreach ($category['subcategories'] as $subCategory) {
+                    $subCategoryId = DB::table('categories')->insertGetId([
                         'parent_id' => $categoryId,
-                        'name' => $subcategory['name'],
-                        'slug' => mb_strtolower($text),
+                        'name' => $subCategory['name'],
+                        'slug' => mb_strtolower(str_replace(' ', '_', $category['name'] . '_' . $subCategory['name'])),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+
+                    foreach ($subCategory['attributes'] as $attributeData) {
+                        $attribute = Attribute::firstOrCreate(['key' => $attributeData['key']], [
+                            'type' => $attributeData['type'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+
+                        DB::table('attribute_category')->insert([
+                            'category_id' => $subCategoryId,
+                            'attribute_id' => $attribute->id,
+                        ]);
+                    }
                 }
             }
-        }
+        });
     }
 }

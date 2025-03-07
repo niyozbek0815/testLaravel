@@ -7,28 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poster extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'category_id',
-        'region_id',
-        'title',
-        'description',
-        'price',
-        'rooms',
-        'bathrooms',
-        'area',
-        'type',
-        'furnished',
-        'garage',
-        'negotiable',
-        'images',
-        'views',
-        'status'
-    ];
+    protected $fillable = ['user_id','status', 'category_id', 'region_id', 'title', 'description', 'price', 'type', 'negotiable', 'views', 'images'];
+
     protected $appends = ['is_liked'];
 
     protected $casts = [
         'images' => 'array',
+        'negotiable' => 'boolean',
         'price' => 'decimal:2'
     ];
 
@@ -61,5 +46,9 @@ class Poster extends Model
         }
         // Agar user `likes` bo'limida mavjud bo'lsa, true qaytariladi
         return $this->likes()->where('user_id', $userId)->exists();
+    }
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'poster_attributes')->withPivot('value');
     }
 }

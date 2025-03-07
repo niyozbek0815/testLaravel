@@ -38,7 +38,7 @@ class PosterController extends Controller
         $data = $request->validated();
         return $this->successResponse(
             "E'lon muvaffaqiyatli qo'shildi!",
-            new PosterReadResource($this->posterService->storePoster($data))
+            $this->posterService->storePoster($data)
         );
     }
 
@@ -47,7 +47,7 @@ class PosterController extends Controller
     {
         return $this->successResponse(
             "Poster read.",
-            new PosterReadResource($this->posterService->getPosterWithViews($id))
+            $this->posterService->getPosterWithViews($id)
         );
     }
 

@@ -14,7 +14,7 @@ class PosterRepository extends BaseRepository
     public function getPosters(array $filters)
     {
 
-        $query = Poster::with(['hashtags', 'user', 'category', 'region'])
+        $query = Poster::with(['hashtags', 'user', 'category', 'region', 'attributes'])
             ->where('status', true);
 
         // Sortlash
@@ -48,11 +48,19 @@ class PosterRepository extends BaseRepository
         }
         return $query->paginate(20);
     }
-    public function syncHashtags(Poster $poster, array $hashtags): void {}
+    public function syncHashtags(Poster $poster, array $hashtags): void {
+        $poster->hashtags()->attach($hashtags);
+    }
+    public function syncAttributes(Poster $poster, array $data): void
+    {
+            $attributes = collect($data)
+                ->mapWithKeys(fn($attr) => [$attr['id'] => ['value' => $attr['value']]]);
+            $poster->attributes()->sync($attributes);
+    }
     public function find($id)
     {
         return $this->model::where('status', true)
-            ->with(['user', 'category', 'region', 'hashtags'])->findOrFail($id);
+            ->with(['user', 'category', 'region', 'hashtags', 'attributes'])->findOrFail($id);
     }
     public function incrementViews(Poster $poster)
     {

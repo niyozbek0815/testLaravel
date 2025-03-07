@@ -18,17 +18,12 @@ return new class extends Migration
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->decimal('price', 16, 2);
-            $table->integer('rooms')->default(0);
-            $table->integer('bathrooms')->default(0);
-            $table->integer('area')->default(0);
-            $table->unsignedBigInteger('views')->default(0);
-            $table->string('type')->default('sale');
-            $table->boolean('furnished')->default(false);
-            $table->boolean('garage')->default(value: false);
-            $table->boolean('status')->default(value: true);
+            $table->decimal('price', 16, 2)->nullable();
+            $table->enum('type', ['sale', 'rent', 'service', 'exchange'])->default('sale');
             $table->boolean('negotiable')->default(false);
-            $table->string('images')->nullable();
+            $table->unsignedBigInteger('views')->default(0);
+            $table->boolean('status')->default(true);
+            $table->string('images')->nullable(); // JSON shaklida saqlash
             $table->timestamps();
         });
     }

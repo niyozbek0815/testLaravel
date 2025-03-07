@@ -32,14 +32,12 @@ class PosterStoreRequest extends FormRequest
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
             'price'       => 'required|integer|min:0|max:99999999999999.99',
-            'rooms'       => 'nullable|integer|min:0',
-            'bathrooms'   => 'nullable|integer|min:0',
-            'area'        => 'required|integer|min:0',
-            'type'        => ['required', Rule::in(['sale', 'rent'])],
-            'furnished'   => 'required|boolean',
+            'type'        => ['required', Rule::in(['sale', 'rent', 'service', 'exchange'])],
             'negotiable'   => 'required|boolean',
-            'garage'      => 'required|boolean',
             'images' => ['required', 'string', 'regex:/^data:image\/(jpeg|png|jpg|gif);base64,.+/'],
+            'attributes' => 'required|array',
+            'attributes.*.id' => 'exists:attributes,id',
+            'attributes.*.value' => 'string',
         ];
     }
     protected function failedValidation(Validator $validator)

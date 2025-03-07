@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Http\Resources\PosterReadResource;
 use Illuminate\Support\Str;
 use App\Repositories\PosterRepository;
 use Exception;
@@ -17,6 +18,7 @@ class PosterService
     {
         $this->posterRepository = $posterRepository;
     }
+
     public function storePoster(array $data)
     {
         DB::beginTransaction();
@@ -25,8 +27,11 @@ class PosterService
             $data['user_id'] = Auth::id();
             $poster = $this->posterRepository->create($data);
             $this->posterRepository->syncHashtags($poster, $data['hashtags'] ?? []);
+            if (!empty($data['attributes'])) {
+                $this->posterRepository->syncAttributes($poster, $data['attributes']);
+            }
             DB::commit();
-            return $poster;
+            return new PosterReadResource($poster->load(['hashtags', 'user', 'category', 'region', 'attributes']));
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception("Poster yangilanmadi: " . $e->getMessage());
@@ -36,7 +41,7 @@ class PosterService
     {
         $poster = $this->posterRepository->find($id);
         $this->handleViews($poster);
-        return $poster;
+        return new PosterReadResource($poster);
     }
     public function getPosterWithUpdate(int $id, array $data)
     {
