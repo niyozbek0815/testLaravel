@@ -58,7 +58,7 @@ class PosterController extends Controller
         $data = $request->validated();
         return $this->successResponse(
             "E'lon muvaffaqiyatli yangilandi!",
-            new PosterReadResource($this->posterService->getPosterWithUpdate($id, $data))
+            $this->posterService->getPosterWithUpdate($id, $data)
         );
     }
 

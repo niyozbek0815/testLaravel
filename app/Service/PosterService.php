@@ -56,7 +56,7 @@ class PosterService
 
             DB::commit();
 
-            return $poster;
+            return new PosterReadResource($poster);
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception("Poster yangilanmadi: " . $e->getMessage());
